@@ -63,7 +63,7 @@ def binary_search_iterative(array, item):
 def binary_search_recursive(array, item, left=None, right=None):
     # implement binary search recursively here
     if left is None and right is None:
-        right = len(array)
+        right = len(array) - 1
         left = 0
     mid = len(array) // 2
     if len(array) == 1 and array[0] != item or len(array) == 0:
@@ -83,5 +83,5 @@ if __name__ == '__main__':
     array = [1,3,5,2,6,8,9,4]
     ordered_array = [1,3,4,7,8,13,20]
     # print(linear_search_recursive(array, 4, index=0))
-    print(binary_search_recursive(ordered_array, 20))
+    print(binary_search_recursive(ordered_array, 8))
     # print(binary_search_iterative(ordered_array, 20))
