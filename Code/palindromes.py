@@ -1,11 +1,14 @@
 #!python
-
+import re
 import string
 # Hint: Use these string constants to ignore capitalization and/or punctuation
 # string.ascii_lowercase is 'abcdefghijklmnopqrstuvwxyz'
 # string.ascii_uppercase is 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 # string.ascii_letters is ascii_lowercase + ascii_uppercase
 
+def get_letters(text):
+    """Remove all spaces and punctuation"""
+    return re.sub('[^A-Za-z]+', '', text).lower()
 
 def is_palindrome(text):
     """A string of characters is a palindrome if it reads the same forwards and
@@ -13,20 +16,43 @@ def is_palindrome(text):
     # implement is_palindrome_iterative and is_palindrome_recursive below, then
     # change this to call your implementation to verify it passes all tests
     assert isinstance(text, str), 'input is not a string: {}'.format(text)
-    return is_palindrome_iterative(text)
-    # return is_palindrome_recursive(text)
+    # return is_palindrome_iterative(text)
+    return is_palindrome_recursive(text)
 
 
 def is_palindrome_iterative(text):
     # TODO: implement the is_palindrome function iteratively here
-    pass
+    if len(text) == 0:
+        return True
+    str = get_letters(text)
+    left_index = 0
+    right_index = len(str) - 1
+    while left_index < right_index-left_index // 2 and str[left_index] == str[right_index-left_index]:
+        left_index += 1
+
+    if str[left_index] != str[right_index-left_index]:
+        return False
+    else:
+        return True
     # once implemented, change is_palindrome to call is_palindrome_iterative
     # to verify that your iterative implementation passes all tests
 
 
 def is_palindrome_recursive(text, left=None, right=None):
     # TODO: implement the is_palindrome function recursively here
-    pass
+    if len(text) == 0:
+        return True
+    str = get_letters(text)
+    if left is None and right is None:
+        left = 0
+        right = len(str) - 1
+
+    if str[left] != str[right]:
+        return False
+    elif left >= right:
+        return True
+    else:
+        return is_palindrome_recursive(str, left+1, right-1)
     # once implemented, change is_palindrome to call is_palindrome_recursive
     # to verify that your iterative implementation passes all tests
 

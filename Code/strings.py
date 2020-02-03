@@ -1,10 +1,41 @@
 #!python
-
-def contains(text, pattern):
-    """Return a boolean indicating whether pattern occurs in text."""
+def find_index_contains(text, pattern):
+    """Return a boolean indicating whether pattern occurs in text and index of the first occurence."""
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # TODO: Implement contains here (iteratively and/or recursively)
+    for i in range(len(text)-len(pattern)+1):
+        if text[i] == pattern[0]:
+            if text[i+1:i+len(pattern)] == pattern[1:]:
+                return True, i
+
+    return False, None
+
+def contains(text, pattern):
+    # return find_index_contains(text, pattern)[0]
+    """Return a boolean indicating whether pattern occurs in text and index of the first occurence."""
+    assert isinstance(text, str), 'text is not a string: {}'.format(text)
+    assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
+    # TODO: Implement contains here (iteratively and/or recursively)
+    if pattern == '':
+        return True
+
+    return find_index_contains(text, pattern)[0]
+
+def contains_recursively(text, pattern):
+    """Return a boolean indicating whether pattern occurs in text and index of the first occurence."""
+    assert isinstance(text, str), 'text is not a string: {}'.format(text)
+    assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
+
+    if pattern == '':
+        return 0
+
+    if len(text) < len(pattern):
+        return False
+    elif text[:len(pattern)] == pattern:
+        return True
+    else:
+        return contains_recursively(text[1:], pattern)
 
 
 def find_index(text, pattern):
@@ -13,7 +44,25 @@ def find_index(text, pattern):
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # TODO: Implement find_index here (iteratively and/or recursively)
+    if pattern == '':
+        return 0
+    return find_index_contains(text, pattern)[1]
 
+def find_index_recursively(text, pattern, index=0):
+    """Return the starting index of the first occurrence of pattern in text,
+    or None if not found."""
+    assert isinstance(text, str), 'text is not a string: {}'.format(text)
+    assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
+
+    if pattern == '':
+        return 0
+
+    if len(text) < len(pattern):
+        return None
+    elif text[:len(pattern)] == pattern:
+        return index
+    else:
+        return find_index_recursively(text[1:], pattern, index+1)
 
 def find_all_indexes(text, pattern):
     """Return a list of starting indexes of all occurrences of pattern in text,
@@ -21,7 +70,22 @@ def find_all_indexes(text, pattern):
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # TODO: Implement find_all_indexes here (iteratively and/or recursively)
+    # length = len(text)
+    if pattern == '':
+        return [i for i in range(len(text))]
+    else:
+        list = []
+        count = 0
+        bool, index = find_index_contains(text, pattern)
+        s = text
 
+        while bool:
+            count += index
+            list.append(count)
+            s = s[index+1:]
+            bool, index = find_index_contains(s, pattern)
+            count += 1
+        return list
 
 def test_string_algorithms(text, pattern):
     found = contains(text, pattern)
@@ -53,4 +117,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    test_string_algorithms('abra cadabra', 'abra')
