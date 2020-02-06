@@ -6,6 +6,7 @@ class Node(object):
         """Initialize this node with the given data."""
         self.data = data
         self.next = None
+        self.size = 0
 
     def __repr__(self):
         """Return a string representation of this node."""
@@ -78,7 +79,16 @@ class LinkedList(object):
         # Check if the given index is out of range and if so raise an error
         if not (0 <= index < self.size):
             raise ValueError('List index out of range: {}'.format(index))
-        # TODO: Find the node at the given index and return its data
+        # Find the node at the given index and return its data
+        current_node = self.head
+        i = 0
+        while i < self.size:
+            if i == index:
+                return current_node.data
+            else:
+                current_node = current_node.next
+
+            i += 1
 
     def insert_at_index(self, index, item):
         """Insert the given item at the given index in this linked list, or
@@ -88,7 +98,28 @@ class LinkedList(object):
         # Check if the given index is out of range and if so raise an error
         if not (0 <= index <= self.size):
             raise ValueError('List index out of range: {}'.format(index))
-        # TODO: Find the node before the given index and insert item after it
+        # Find the node before the given index and insert item after it
+        new_node = Node(item)
+        current_node = self.head
+        # Append item if index is equal to the length of linked list substracts 1
+        if index == self.size:
+            self.append(item)
+        # Prepend item if index is 0
+        elif index == 0:
+            self.prepend(item)
+        else:
+            i = 0
+            # for i in range(self.size):
+            while i < self.size:
+                if i == index - 1:
+                    new_node.next = current_node.next
+                    current_node.next = new_node
+                    self.size += 1
+                    return
+                current_node = current_node.next
+                i += 1
+
+            self.size += 1
 
     def append(self, item):
         """Insert the given item at the tail of this linked list.
@@ -104,6 +135,7 @@ class LinkedList(object):
             self.tail.next = new_node
         # Update tail to new node regardless
         self.tail = new_node
+        self.size += 1
 
     def prepend(self, item):
         """Insert the given item at the head of this linked list.
@@ -119,6 +151,7 @@ class LinkedList(object):
             new_node.next = self.head
         # Update head to new node regardless
         self.head = new_node
+        self.size += 1
 
     def find(self, quality):
         """Return an item from this linked list satisfying the given quality.
@@ -143,9 +176,20 @@ class LinkedList(object):
         using the same node, or raise ValueError if old_item is not found.
         Best case running time: ??? under what conditions? [TODO]
         Worst case running time: ??? under what conditions? [TODO]"""
-        # TODO: Find the node containing the given old_item and replace its
+        # Find the node containing the given old_item and replace its
         # data with new_item, without creating a new node object
-        pass
+        current_node = self.head
+
+        while current_node is not None:
+            if current_node.data == old_item:
+                current_node.data = new_item
+                return
+
+            current_node = current_node.next
+
+        raise ValueError('Value is not in the list: {}'.format(old_item))
+
+
 
     def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError.
@@ -189,6 +233,8 @@ class LinkedList(object):
                     previous.next = None
                 # Update tail to the previous node regardless
                 self.tail = previous
+
+            self.size -= 1
         else:
             # Otherwise raise an error to tell the user that delete has failed
             raise ValueError('Item not found: {}'.format(item))
@@ -204,6 +250,9 @@ def test_linked_list():
     ll.append('B')
     print(ll)
     ll.append('C')
+    ll.insert_at_index(1,'F')
+    print(ll)
+    ll.replace('F', 'U')
     print(ll)
     print('head: {}'.format(ll.head))
     print('tail: {}'.format(ll.tail))
@@ -226,6 +275,16 @@ def test_linked_list():
     print('tail: {}'.format(ll.tail))
     print('size: {}'.format(ll.size))
     print('length: {}'.format(ll.length()))
+
+    ll.insert_at_index(0, 'D')
+    ll.insert_at_index(1, 'L')
+    ll.insert_at_index(1, 'P')
+    print(ll)
+    print('head: {}'.format(ll.head))
+    print('tail: {}'.format(ll.tail))
+    print('size: {}'.format(ll.size))
+    print('length: {}'.format(ll.length()))
+
 
 
 if __name__ == '__main__':
