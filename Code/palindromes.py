@@ -24,13 +24,13 @@ def is_palindrome_iterative(text):
     # TODO: implement the is_palindrome function iteratively here
     if len(text) == 0:
         return True
-    str = get_letters(text)
+    s = get_letters(text)
     left_index = 0
-    right_index = len(str) - 1
-    while left_index < right_index-left_index // 2 and str[left_index] == str[right_index-left_index]:
+    right_index = len(s) - 1
+    while left_index < right_index-left_index // 2 and s[left_index] == s[right_index-left_index]:
         left_index += 1
 
-    if str[left_index] != str[right_index-left_index]:
+    if s[left_index] != s[right_index-left_index]:
         return False
     else:
         return True
@@ -42,17 +42,17 @@ def is_palindrome_recursive(text, left=None, right=None):
     # TODO: implement the is_palindrome function recursively here
     if len(text) == 0:
         return True
-    str = get_letters(text)
+    s = get_letters(text)
     if left is None and right is None:
         left = 0
-        right = len(str) - 1
+        right = len(s) - 1
 
-    if str[left] != str[right]:
+    if s[left] != s[right]:
         return False
     elif left >= right:
         return True
     else:
-        return is_palindrome_recursive(str, left+1, right-1)
+        return is_palindrome_recursive(s, left+1, right-1)
     # once implemented, change is_palindrome to call is_palindrome_recursive
     # to verify that your iterative implementation passes all tests
 

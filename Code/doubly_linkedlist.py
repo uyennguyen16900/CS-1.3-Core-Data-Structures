@@ -57,26 +57,29 @@ class DoublyLinkedList(object):
         """Insert the given item at the head of this doubly linked list"""
         # Create a new node to hold the given item
         new_node = Node(item)
-        new_node.previous = self.tail
-
         # Check if the node is empty
         if self.is_empty():
             self.head = new_node
         else:
             self.tail.next = new_node
+            new_node.previous = self.tail
         # Update new node to tail
         self.tail = new_node
         self.size += 1
 
     def prepend(self, item):
-        """"""
+        """Insert the given item at the tail of this linked list"""
+        # Create new node to hold the given item
         new_node = Node(item)
-        new_node.next = self.head
-        new_node.previous = None
+        # Check if this linked list is empty
         if self.is_empty():
+            # Assign tail to new node
             self.tail = new_node
         else:
+            # Otherwise insert new node before head
+            new_node.next = self.head
             self.head.previous = new_node
+        # Update head to new node regardless
         self.head = new_node
         self.size += 1
 
@@ -87,14 +90,12 @@ class DoublyLinkedList(object):
 
 
     def delete(self, item):
-        """"""
-        current_node = self.head.next
+        """Delete the given item from this linked list, or raise ValueError"""
+        current_node = self.head
         found = False
-        return current_node
         while not found and current_node is not None:
             if current_node.data == item:
                 found = True
-                # current_node.previous.next = current_node.next
             else:
                 current_node = current_node.next
 
@@ -124,17 +125,17 @@ class DoublyLinkedList(object):
         """Prints content of linked list starting from the given node"""
         print( "\nTraversal in forward direction:")
         while(node is not None):
-            print( " % d" %(node.data))
+            print(" % d" %(node.data))
             last = node
             node = node.next
 
         print( "\nTraversal in reverse direction:")
         while(last is not None):
-            print( " % d" %(last.data))
+            print(" % d" %(last.data))
             last = last.previous
 
 def test_linked_list():
-    ll = DoublyLinkedlist()
+    ll = DoublyLinkedList()
     print(ll)
 
     print('Appending items:')
@@ -151,20 +152,19 @@ def test_linked_list():
     print('size: {}'.format(ll.size))
 
     print('Deleting items:')
-    print(ll.delete('B'))
-    # print(ll)
-    # ll.delete('C')
-    # print(ll)
-    # ll.delete('A')
-    # print(ll)
-    # print('head: {}'.format(ll.head))
-    # print('tail: {}'.format(ll.tail))
-    # print('size: {}'.format(ll.size))
+    ll.delete('B')
+    print(ll)
+    ll.delete('C')
+    print(ll)
+
+    print('head: {}'.format(ll.head))
+    print('tail: {}'.format(ll.tail))
+    print('size: {}'.format(ll.size))
 
 
 
 if __name__ == '__main__':
-    # test_linked_list()
+    test_linked_list()
     llist = DoublyLinkedList()
 
     # Insert 6. So the list becomes 6->None
@@ -183,3 +183,6 @@ if __name__ == '__main__':
     llist.append(4)
 
     llist.printList(llist.head)
+
+    llist.delete(7)
+    print(llist)
