@@ -225,6 +225,21 @@ class BinarySearchTree(object):
             # TODO: Recursively descend to the node's right child, if it exists
             return self._find_parent_node_recursive(item, node.right, node)  # Hint: Remember to update the parent parameter
 
+    def _replace_with_successor_node(self, node):
+        """Find the node in the right subtree of the given node that has the minimum value
+            then replace node with successor node"""
+        # starting node: right subtree
+        succ = node.right
+        succ_parent = node
+
+        while succ.left:
+            succ_parent = succ
+            succ = succ.left
+
+        node.data = succ.data
+        succ_parent.left = succ.left
+
+
     def delete(self, item):
         """Remove given item from this tree, if present, or raise ValueError.
         TODO: Best case running time: ??? under what conditions?
@@ -232,6 +247,48 @@ class BinarySearchTree(object):
         # TODO: Use helper methods and break this algorithm down into 3 cases
         # based on how many children the node containing the given item has and
         # implement new helper methods for subtasks of the more complex cases
+        node = self._find_node_iterative(item)
+        # Case 1: item has no children nodes
+        if node.left is None and node.right is None:
+            # special case
+            if node is self.root:
+                self.root = None
+                return
+            # find parent of node
+            parent = self._find_parent_node_recursive(node)
+            if parent.left == node:
+                parent.left = None
+            else:
+                parent.right = None
+            return
+
+        # Case 2: item has 1 child node
+        if node.left is None:
+            # special case
+            if node is self.root:
+                self.root = self.root.right
+                return
+
+            parent = self._find_parent_node_recursive(node)
+            # link node's right child as node's parent child
+            if parent.left == node:
+                parent.left = node.right
+            else:
+                parent.right = node.right
+            return
+
+        # Case 3: item has 2 children nodes
+        # find successor of item: 1 step right, all the way left
+        if node.right.left is None:
+            #  special case: the right node of node is te successor
+            # repace node with node.right
+            node.data = node.right.data
+            node.right = node.right.right
+
+            return
+
+        self._replace_with_successor_node(node)
+
 
     def items_in_order(self):
         """Return an in-order list of all items in this binary search tree."""
@@ -420,10 +477,16 @@ def test_binary_search_tree():
     result = tree.search(item)
     print('search({}): {}'.format(item, result))
 
+    print('\nDeleting  items:')
+    tree.delete(12)
+    # print('delete({}): {}'.format(8))
+
+
+
     print('\nTraversing items:')
     # print('items in-order:    {}'.format(tree.items_in_order()))
-    print('items pre-order:   {}'.format(tree.items_pre_order()))
-    print('items post-order:  {}'.format(tree.items_post_order()))
+    # print('items pre-order:   {}'.format(tree.items_pre_order()))
+    # print('items post-order:  {}'.format(tree.items_post_order()))
     print('items level-order: {}'.format(tree.items_level_order()))
     # print(tree.printt())
 
