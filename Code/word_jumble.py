@@ -4,7 +4,7 @@ from random import shuffle
 from hashtable import HashTable
 
 def get_permutations(string):
-    """"""
+    """Return all permutations of the string"""
     if len(string) == 0:
         return []
     elif len(string) == 1:
@@ -21,6 +21,7 @@ def get_permutations(string):
 
 
 def get_words():
+    # get words from a file
     file = open('/usr/share/dict/words','r')
     words = file.read().split()
     file.close()
@@ -30,8 +31,9 @@ def get_words():
 
 
 def solve_jumble_word(letters):
-    """"""
+    """Return a hash table with each letter is a key and the result is its value"""
     words = get_words()
+    # create a hash table to store all the letters with their final result(s)
     results = HashTable(len(letters))
     for letter in letters:
         result = []
